@@ -52,6 +52,26 @@ app.delete("/fruits/:fruitId", async (req, res) => {
   res.redirect("/fruits");
 });
 
+app.get("/fruits/:fruitId/edit", async (req, res) => {
+  const fruitData = await Fruit.findById(req.params.fruitId);
+
+  res.render("fruits/edit.ejs", {
+    fruit: fruitData,
+  });
+});
+
+app.put("/fruits/:fruitId", async (req, res) => {
+  if (req.body.isReadyToEat === "on") {
+    req.body.isReadyToEat = true;
+  } else {
+    req.body.isReadyToEat = false;
+  }
+
+  await Fruit.findByIdAndUpdate(req.params.fruitId, req.body);
+
+  res.redirect(`/fruits/${req.params.fruitId}`);
+});
+
 db.on("connected", () => {
   console.clear();
   console.log("You are connected to the Database");
