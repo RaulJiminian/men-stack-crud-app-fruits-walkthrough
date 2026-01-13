@@ -1,6 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const methodOverride = require("method-override");
+const path = require("path");
 const db = require("./db/connection.js");
 const Fruit = require("./models/fruit.js");
 
@@ -9,6 +10,7 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride("_method"));
 app.use(logger("dev"));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
 app.get("/", (req, res) => {
