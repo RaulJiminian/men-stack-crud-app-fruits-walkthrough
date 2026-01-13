@@ -1,11 +1,13 @@
 const express = require("express");
 const logger = require("morgan");
+const methodOverride = require("method-override");
 const db = require("./db/connection.js");
 const Fruit = require("./models/fruit.js");
 
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
+app.use(methodOverride("_method"));
 app.use(logger("dev"));
 
 // Routes
@@ -43,6 +45,11 @@ app.get("/fruits/:fruitId", async (req, res) => {
   res.render("fruits/show.ejs", {
     fruit: fruit,
   });
+});
+
+app.delete("/fruits/:fruitId", async (req, res) => {
+  await Fruit.findByIdAndDelete(req.params.fruitId);
+  res.redirect("/fruits");
 });
 
 db.on("connected", () => {
