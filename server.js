@@ -26,7 +26,23 @@ app.post("/fruits", async (req, res) => {
 
   await Fruit.create(req.body);
 
-  res.redirect("/fruits/new");
+  res.redirect("/fruits");
+});
+
+app.get("/fruits", async (req, res) => {
+  const allFruits = await Fruit.find({});
+
+  res.render("fruits/index.ejs", {
+    fruits: allFruits,
+  });
+});
+
+app.get("/fruits/:fruitId", async (req, res) => {
+  const fruit = await Fruit.findById(req.params.fruitId);
+
+  res.render("fruits/show.ejs", {
+    fruit: fruit,
+  });
 });
 
 db.on("connected", () => {
